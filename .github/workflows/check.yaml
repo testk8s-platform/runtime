@@ -22,12 +22,16 @@ jobs:
       - name: Fetch main branch for reference
         run: git fetch origin main:main
         if: github.ref_name != 'main'
-      - name: Install siderolabs/conform
-        run: go install github.com/siderolabs/conform/cmd/conform@latest
-      - name: Run siderolabs/conform
-        run: |
-          set +e
-          output=$(conform enforce 2>&1)
-          result=$?
-          printf '```\n%s\n```' "$output" | tee -a "$GITHUB_STEP_SUMMARY"
-          exit $result
+      - name: Run conformance check action
+        uses: siderolabs/conform@main
+        with:
+          token: "{{ secrets.GITHUB_TOKEN }}"
+#      - name: Install siderolabs/conform
+#        run: go install github.com/siderolabs/conform/cmd/conform@latest
+#      - name: Run siderolabs/conform
+#        run: |
+#          set +e
+#          output=$(conform enforce 2>&1)
+#          result=$?
+#          printf '```\n%s\n```' "$output" | tee -a "$GITHUB_STEP_SUMMARY"
+#          exit $result
