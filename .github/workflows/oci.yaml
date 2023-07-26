@@ -1,0 +1,32 @@
+on:
+  # TODO: Support tags
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+name: OCI
+jobs:
+  push:
+    name: Push
+    runs-on: ubuntu-latest
+    container:
+      image: fluxcd/flux-cli:v2.0.1
+      options: --user root
+    steps:
+      - name: Install dependencies
+        run: apk --no-cache add docker git make
+      - name: Log in to the container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check out sources
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Mark sources as safe for Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Push OCI artifacts
+        run: make push-all
