@@ -6,7 +6,6 @@ Runtime environment of `testk8s-platform`, hosting components enabling observabi
 
 - [`metrics`](metrics) deploys a Prometheus + Grafana stack with built-in observability and dashboards for Cilium
 
-
 ## Authors
 
 - Dennis Marttinen ([@twelho](https://github.com/twelho))
